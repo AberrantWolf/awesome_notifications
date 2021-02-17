@@ -232,7 +232,7 @@ class AwesomeNotifications {
     _validateId(content.id);
 
     try {
-      final bool wasCreated = await _channel.invokeMethod(
+      dynamic wasCreated = await _channel.invokeMethod(
           CHANNEL_METHOD_CREATE_NOTIFICATION,
           PushNotification(
                   content: content,
@@ -240,6 +240,7 @@ class AwesomeNotifications {
                   actionButtons: actionButtons)
               .toMap());
 
+      print("Notification was $wasCreated");
       return wasCreated;
     } on PlatformException catch (error) {
       print(error);

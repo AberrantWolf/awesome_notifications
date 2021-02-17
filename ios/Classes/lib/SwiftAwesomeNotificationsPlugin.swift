@@ -874,7 +874,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
     }
 
     private func channelMethodCreateNotification(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        
+		Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Trying to create notification")
         do {
 
             let pushData:[String:Any?] = call.arguments as? [String:Any?] ?? [:]
@@ -895,20 +895,24 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                             if error != nil {
                                 let flutterError:FlutterError?
                                 if let notificationError = error as? PushNotificationError {
-                                    switch notificationError {
+									Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Notification error: \(notificationError)")
+									switch notificationError {
                                         case PushNotificationError.notificationNotAuthorized:
+											Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Error was not authorized")
                                             flutterError = FlutterError.init(
                                                 code: "notificationNotAuthorized",
                                                 message: "Notifications are disabled",
                                                 details: nil
                                             )
                                         case PushNotificationError.cronException:
+											Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Error was cron exception")
                                             flutterError = FlutterError.init(
                                                 code: "cronException",
                                                 message: notificationError.localizedDescription,
                                                 details: nil
                                             )
                                         default:
+											Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Error was unknown error")
                                             flutterError = FlutterError.init(
                                                 code: "exception",
                                                 message: "Unknow error",
@@ -917,6 +921,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                                     }
                                 }
                                 else {
+									Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Error was not push notification error")
                                     flutterError = FlutterError.init(
                                         code: error.debugDescription,
                                         message: error?.localizedDescription,
@@ -927,6 +932,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                                 return
                             }
                             else {
+								Log.d(SwiftAwesomeNotificationsPlugin.TAG, "No error sending notification")
                                 result(sent)
                                 return
                             }
@@ -942,6 +948,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
                 }
             }
             else {
+				Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Into the else now")
                 result(
                     FlutterError.init(
                         code: "Invalid parameters",
@@ -953,7 +960,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             }
 
         } catch {
-            
+			Log.d(SwiftAwesomeNotificationsPlugin.TAG, "Some kind of error was caught")
             result(
                 FlutterError.init(
                     code: "\(error)",
@@ -963,7 +970,7 @@ public class SwiftAwesomeNotificationsPlugin: NSObject, FlutterPlugin, UNUserNot
             )
             return
         }
-        
+		Log.d(SwiftAwesomeNotificationsPlugin.TAG, "We somehow got to the impossible place")
         result(nil)
     }
 
